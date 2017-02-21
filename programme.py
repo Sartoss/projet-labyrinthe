@@ -1,4 +1,8 @@
-def entree():
+def entree_infos_laby():
+    """
+    Fonction qui fait entrer par l'utilisateur les dimensions du labyrinthe
+    Elle renvoie la hauteur et la largeur du labyrinthe
+    """
     l=int(input("Entrez les dimensions du labyrinthe :\nLargeur :"))
     h=int(input("Hauteur :"))
     return [h,l]
