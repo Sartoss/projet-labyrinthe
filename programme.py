@@ -12,8 +12,7 @@ def genere_cases(h,l):
             liste.append(-1)
         matrice.append(liste)
         matrice.append([-1]*(2*l+1))
-    for i in matrice:
-        print(i)
+
         
         
 
