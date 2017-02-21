@@ -17,10 +17,14 @@ def genere_cases(h,l):
         
 
 def entree_infos_chemin():
+    """
+    Fonction qui fait entrer par l'utilisateur les coordonnées de départ et d'arrivée du labyrinthe
+    Elle renvoie les coordonnées du départ et de l'arrivée
+    """
     print("Entrer les coordonnées du point de départ:")
-    x1=int(input("X: "))
-    y1=int(input("Y: "))
+    x1=int(input("X: ")) #abscisse du départ
+    y1=int(input("Y: ")) #ordonnée du départ
     print("Entrer les coordonnées du point d'arrivée:")
-    x2=int(input("X: "))
-    y2=int(input("Y: "))
+    x2=int(input("X: ")) #abscisse de l'arrivée
+    y2=int(input("Y: ")) #ordonnée de l'arrivée
     return [x1,y1],[x2,y2]
