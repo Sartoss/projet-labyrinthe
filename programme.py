@@ -10,7 +10,6 @@ def entree_infos_laby():
     return (h,l)
 
 def genere_matrice(h,l):
-    p=["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
     matrice=[[-1]*(2*l+1)]
     for i in range(h):
         liste=[-1]
