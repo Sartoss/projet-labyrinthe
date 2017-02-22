@@ -90,10 +90,10 @@ def entree_infos_chemin(matrice):
         x1=int(input("X: ")) #abscisse du départ
         y1=int(input("Y: ")) #ordonnée du départ
         if y1==0 or y1==len(matrice)-1:
-            if x1>0 and x1<len(matrice[y1]) and cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases):
+            if x1>0 and x1<len(matrice[y1]) and len(cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0])>0:
                 break
         if x1==0 or x1==len(matrice[y1])-1:
-            if y1>0 and y1<len(matrice) and cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases):
+            if y1>0 and y1<len(matrice) and len(cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0])>0:
                 break
         print("Coordonnées invalides")
     
@@ -102,13 +102,14 @@ def entree_infos_chemin(matrice):
         x2=int(input("X: ")) #abscisse de l'arrivée
         y2=int(input("Y: ")) #ordonnée de l'arrivée
         if y2==0 or y2==len(matrice)-1:
-            if x2>0 and x2<len(matrice[y2]) and cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases):
+            if x2>0 and x2<len(matrice[y2]) and len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])>0:
                 break
-        if x2==0 or x2==len(matrice[y2])-1 and cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases):
+        if x2==0 or x2==len(matrice[y2])-1 and len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])>0:
             if y2>0 and y2<len(matrice):
                 break
         print("Coordonnées invalides")
     return x1,y1,x2,y2
+
         
 h,l=entree_infos_laby()
 matrice=genere_matrice(h,l)
