@@ -34,20 +34,22 @@ def cases_adjacentes(h,l,case,cases):
     """
     Renvoie les connexions possibles d'une case donnée
     """
-    a=[]
+    i=[]
+    d=[]
     if case-l>=0:
-        a.append(case-l)
+        i.append(case-l)
     if case%l!=0:
-        a.append(case-1)
+        i.append(case-1)
     if (case+1)%l!=0:
-        a.append(case+1)
+        i.append(case+1)
     if case+l<h*l:
-        a.append(case+l)
-    m=a[:]
-    for i in m:
-        if cases[case]==cases[i]:
-            a.remove(i)
-    return a
+        i.append(case+l)
+    m=i[:]
+    for k in m:
+        if cases[case]==cases[k]:
+            i.remove(k)
+            d.append(k)
+    return (i,d)
 
 def genere_laby(h,l,matrice):
     """
@@ -58,7 +60,7 @@ def genere_laby(h,l,matrice):
     fin=[0]*(h*l)
     while cases!=fin: #tant qu'au moins une case est isolée des autres
         r=connect[randint(0,len(connect)-1)]
-        a=cases_adjacentes(h,l,r,cases)
+        a=cases_adjacentes(h,l,r,cases)[0]
         if len(a)==0:
             connect.remove(r)
             continue
