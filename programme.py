@@ -37,19 +37,19 @@ def cases_adjacentes(h,l,case,cases):
     i=[]
     d=[]
     if case-l>=0:
-        i.append(case-l)
+        d.append(case-l)
     if case%l!=0:
-        i.append(case-1)
+        d.append(case-1)
     if (case+1)%l!=0:
-        i.append(case+1)
+        d.append(case+1)
     if case+l<h*l:
-        i.append(case+l)
-    m=i[:]
+        d.append(case+l)
+    m=d[:]
     for k in m:
         if cases[case]==cases[k]:
-            i.remove(k)
-            d.append(k)
-    return (i,d)
+            d.remove(k)
+            i.append(k)
+    return (d,i)
 
 def genere_laby(h,l,matrice):
     """
