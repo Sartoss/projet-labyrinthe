@@ -135,7 +135,14 @@ def entree_infos_chemin(matrice,cases):
             print("Coordonnées invalides")
             
     return x1,y1,x2,y2
-
+def parcours(x,y,h,l,laby,c):
+    a=cases_adjacentes(h,l,l*y+x,laby)[1]
+    laby[y*l+x]=c
+    if len(a)==0:
+        return laby
+    for i in a:
+        laby=parcours(i%l,i//l,h,l,laby,c+1)
+    return laby
         
 h,l=entree_infos_laby()
 matrice=genere_matrice(h,l)
@@ -145,6 +152,10 @@ cases=[]
 for i in range(len(matrice)): #génère la liste des cases
     cases+=matrice[i]
 x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
-matrice[y1][x1]=10
-matrice[y2][x2]=11
-affiche_laby(matrice)   
+cases[(1+2*l)*y1+x1]=0
+cases[(1+2*l)*y2+x2]=0
+laby=parcours(x1,y1,len(matrice),len(matrice[0]),cases,1)
+matrice=[]
+for i in range(2*h+1):
+    matrice.append(laby[(2*l+1)*i:(2*l+1)*(i+1)])
+affiche_laby(matrice)
