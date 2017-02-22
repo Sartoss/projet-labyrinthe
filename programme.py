@@ -77,37 +77,67 @@ def genere_laby(h,l,matrice):
     return matrice
 
 
+def check_depart(matrice,cases,x1,y1,dispos):
+    """
+    Fonction qui prend en argument la matrice, la liste des cases, les coordonnées du 
+    départ et le nombre de cases différentes adjacentes au départ.
+    Elle renvoie vrai si les coordonnées sont valides, faux sinon
+    """
+    if len(dispos)>0: #S'il y a une case adjacente au départ
+        if y1==0 or y1==len(matrice)-1: #Si le départ est dans le mur du haut ou du bas
+            if x1>0 and x1<len(matrice[y1]): #Si le départ a une abscisse valide
+                return True
+        if x1==0 or x1==len(matrice[y1])-1: #Si le départ est le mur de droite ou de gauche
+            if y1>0 and y1<len(matrice): #Si le départ a une ordonnée valide
+                return True
+    return False
+    
+
+def check_arrivee(matrice,cases,x2,y2,dispos):
+    """
+    Fonction qui prend en argument la matrice, la liste des cases, les coordonnées de 
+    l'arrivée et le nombre de cases différentes adjacentes à l'arrivée.
+    Elle renvoie vrai si les coordonnées sont valides, faux sinon
+    """
+    if len(dispos)>0: #S'il y a une case adjacente à l'arrivée
+        if y2==0 or y2==len(matrice)-1: #Si l'arrivée est dans le mur du haut ou du bas
+            if x2>0 and x2<len(matrice[y2]): #Si l'arrivée a une abscisse valide
+                return True
+        if x2==0 or x2==len(matrice[y2])-1: #Si l'arrivée est le mur de droite ou de gauche
+            if y2>0 and y2<len(matrice): #Si l'arrivée a une ordonnée valide
+                return True
+    return False
+
+
 def entree_infos_chemin(matrice):
     """
     Fonction qui fait entrer par l'utilisateur les coordonnées de départ et d'arrivée du labyrinthe
     Elle renvoie les coordonnées du départ et de l'arrivée
     """
+    depok=False
+    arrok=False
     cases=[]
-    for i in range(len(matrice)):
+    for i in range(len(matrice)): #génère la liste des cases
         cases+=matrice[i]
-    while True:
+        
+    while depok==False:
         print("Entrer les coordonnées du point de départ:")
         x1=int(input("X: ")) #abscisse du départ
         y1=int(input("Y: ")) #ordonnée du départ
-        if y1==0 or y1==len(matrice)-1:
-            if x1>0 and x1<len(matrice[y1]) and len(cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0])>0:
-                break
-        if x1==0 or x1==len(matrice[y1])-1:
-            if y1>0 and y1<len(matrice) and len(cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0])>0:
-                break
-        print("Coordonnées invalides")
-    
-    while True:
+        dispos=cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0]
+        depok=check_depart(matrice,cases,x1,y1,dispos) #vérifie que le départ est bien placé
+        if depok==False:
+            print("Coordonnées invalides")
+            
+    while arrok==False:
         print("Entrer les coordonnées du point d'arrivée:")
         x2=int(input("X: ")) #abscisse de l'arrivée
         y2=int(input("Y: ")) #ordonnée de l'arrivée
-        if y2==0 or y2==len(matrice)-1:
-            if x2>0 and x2<len(matrice[y2]) and len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])>0:
-                break
-        if x2==0 or x2==len(matrice[y2])-1 and len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])>0:
-            if y2>0 and y2<len(matrice):
-                break
-        print("Coordonnées invalides")
+        dispos=cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0]
+        arrok=check_arrivee(matrice,cases,x2,y2,dispos) #vérifie que l'arrivée est bien placée
+        if arrok==False:
+            print("Coordonnées invalides")
+            
     return x1,y1,x2,y2
 
         
