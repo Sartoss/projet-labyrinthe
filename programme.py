@@ -109,17 +109,13 @@ def check_arrivee(matrice,cases,x2,y2,dispos):
     return False
 
 
-def entree_infos_chemin(matrice):
+def entree_infos_chemin(matrice,cases):
     """
     Fonction qui fait entrer par l'utilisateur les coordonnées de départ et d'arrivée du labyrinthe
     Elle renvoie les coordonnées du départ et de l'arrivée
     """
     depok=False
-    arrok=False
-    cases=[]
-    for i in range(len(matrice)): #génère la liste des cases
-        cases+=matrice[i]
-        
+    arrok=False 
     while depok==False:
         print("Entrer les coordonnées du point de départ:")
         x1=int(input("X: ")) #abscisse du départ
@@ -145,7 +141,10 @@ h,l=entree_infos_laby()
 matrice=genere_matrice(h,l)
 matrice=genere_laby(h,l,matrice)
 affiche_laby(matrice)
-x1,y1,x2,y2=entree_infos_chemin(matrice)
+cases=[]
+for i in range(len(matrice)): #génère la liste des cases
+    cases+=matrice[i]
+x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
 matrice[y1][x1]=10
 matrice[y2][x2]=11
 affiche_laby(matrice)   
