@@ -26,6 +26,8 @@ def affiche_laby(matrice):
         for j in range(len(matrice[0])):
             if matrice[i][j]==-1:
                 print("* ",end="")
+            elif matrice[i][j]==-2:
+                print(". ",end="")
             else:
                 print(p[matrice[i][j]]+" ",end="")
         print("")
