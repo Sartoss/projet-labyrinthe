@@ -79,35 +79,39 @@ def genere_laby(h,l,matrice):
     return matrice
 
 
-def check_depart(matrice,cases,x1,y1,dispos):
+def check_depart(matrice,cases,x1,y1):
     """
     Fonction qui prend en argument la matrice, la liste des cases, les coordonnées du 
     départ et le nombre de cases différentes adjacentes au départ.
     Elle renvoie vrai si les coordonnées sont valides, faux sinon
     """
-    if len(dispos)>0: #S'il y a une case adjacente au départ
+    try:
         if y1==0 or y1==len(matrice)-1: #Si le départ est dans le mur du haut ou du bas
             if x1>0 and x1<len(matrice[y1]): #Si le départ a une abscisse valide
                 return True
         if x1==0 or x1==len(matrice[y1])-1: #Si le départ est le mur de droite ou de gauche
             if y1>0 and y1<len(matrice): #Si le départ a une ordonnée valide
                 return True
+    except:
+        return False
     return False
     
 
-def check_arrivee(matrice,cases,x2,y2,dispos):
+def check_arrivee(matrice,cases,x2,y2):
     """
     Fonction qui prend en argument la matrice, la liste des cases, les coordonnées de 
     l'arrivée et le nombre de cases différentes adjacentes à l'arrivée.
     Elle renvoie vrai si les coordonnées sont valides, faux sinon
     """
-    if len(dispos)>0: #S'il y a une case adjacente à l'arrivée
+    try:
         if y2==0 or y2==len(matrice)-1: #Si l'arrivée est dans le mur du haut ou du bas
             if x2>0 and x2<len(matrice[y2]): #Si l'arrivée a une abscisse valide
                 return True
         if x2==0 or x2==len(matrice[y2])-1: #Si l'arrivée est le mur de droite ou de gauche
             if y2>0 and y2<len(matrice): #Si l'arrivée a une ordonnée valide
                 return True
+    except:
+        return False
     return False
 
 
@@ -122,18 +126,17 @@ def entree_infos_chemin(matrice,cases):
         print("Entrer les coordonnées du point de départ:")
         x1=int(input("X: ")) #abscisse du départ
         y1=int(input("Y: ")) #ordonnée du départ
-        dispos=cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0]
-        depok=check_depart(matrice,cases,x1,y1,dispos) #vérifie que le départ est bien placé
-        if depok==False:
+        depok=check_depart(matrice,cases,x1,y1) #vérifie que le départ est bien placé
+        if depok==False or cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0]==0:
             print("Coordonnées invalides")
+        
             
     while arrok==False:
         print("Entrer les coordonnées du point d'arrivée:")
         x2=int(input("X: ")) #abscisse de l'arrivée
         y2=int(input("Y: ")) #ordonnée de l'arrivée
-        dispos=cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0]
-        arrok=check_arrivee(matrice,cases,x2,y2,dispos) #vérifie que l'arrivée est bien placée
-        if arrok==False:
+        arrok=check_arrivee(matrice,cases,x2,y2) #vérifie que l'arrivée est bien placée
+        if arrok==False or cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0]==0:
             print("Coordonnées invalides")
             
     return x1,y1,x2,y2
@@ -176,10 +179,9 @@ def deplacement(direct,x1,y1):
             return [x1,y1+1]
 
 
-def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
-    x=x1
-    y=y1
+def initialisation(matrice,cases,x1,y1):
     dep=y1*len(matrice[0])+x1
+    print(dep)
     case=cases_adjacentes(len(matrice),len(matrice[0]),dep,cases)[1][0]
     direct=dep-case
     if direct==1:
@@ -187,11 +189,22 @@ def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
     elif direct==-1:
         x1+=1
     elif direct==len(matrice[0]):
-        print("yolo")
         y1-=1
     elif direct==-len(matrice[0]):
-        y1+=1
+        y1+=1  
+    return [x1,y1]
+
+
+
+def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
+    
+    x=x1
+    y=y1
+    coords=initialisation()
+    x1=coords[0]
+    y1=coords[1]
     matrice[y1][x1]=-2
+    
     while [x1,y1]!=[x2,y2]:
         print("yola")
         orient=determine_orientation(x1,y1,x,y)
