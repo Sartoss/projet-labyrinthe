@@ -127,17 +127,18 @@ def entree_infos_chemin(matrice,cases):
         x1=int(input("X: ")) #abscisse du départ
         y1=int(input("Y: ")) #ordonnée du départ
         depok=check_depart(matrice,cases,x1,y1) #vérifie que le départ est bien placé
-        if depok==False or cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0]==0:
+        if depok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0])==0:
             print("Coordonnées invalides")
-        
+            depok=False
             
     while arrok==False:
         print("Entrer les coordonnées du point d'arrivée:")
         x2=int(input("X: ")) #abscisse de l'arrivée
         y2=int(input("Y: ")) #ordonnée de l'arrivée
         arrok=check_arrivee(matrice,cases,x2,y2) #vérifie que l'arrivée est bien placée
-        if arrok==False or cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0]==0:
+        if arrok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])==0:
             print("Coordonnées invalides")
+            arrok=False
             
     return x1,y1,x2,y2
 
@@ -158,11 +159,11 @@ def determine_orientation(x1,y1,x,y):
 def direction(orient):
     if orient=="haut":
         direction=["droite","haut","gauche","bas"]
-    elif orient=="droite":
+    elif orient=="gauche":
         direction=["haut","gauche","bas","droite"]
     elif orient=="bas":
         direction=["gauche","bas","droite","haut"]
-    elif orient=="gauche":
+    elif orient=="droite":
         direction=["bas","droite","haut","gauche"]
     return direction
     
@@ -170,52 +171,65 @@ def direction(orient):
 def deplacement(direct,x1,y1):
     for i in range(4):
         if direct[i]=="droite" and matrice[y1][x1+1]!=-1:
-            return [x1+1,y1]
+            return [x1+1,y1,"droite"]
         elif direct[i]=="gauche" and matrice[y1][x1-1]!=-1:
-            return [x1-1,y1]
+            return [x1-1,y1,"gauche"]
         elif direct[i]=="haut" and matrice[y1-1][x1]!=-1:
-            return [x1,y1-1]
+            return [x1,y1-1,"haut"]
         elif direct[i]=="bas" and matrice[y1+1][x1]!=-1:
-            return [x1,y1+1]
+            return [x1,y1+1,"bas"]
+
+def chemin_ouvert(cases,l,h,dep,x1,y1):
+    if x1==0:
+        return dep+1
+    elif x1==l:
+        return dep-1
+    elif y1==0:
+        return dep+l
+    elif y1==h:
+        return dep-l
 
 
 def initialisation(matrice,cases,x1,y1):
-    dep=y1*len(matrice[0])+x1
-    print(dep)
-    case=cases_adjacentes(len(matrice),len(matrice[0]),dep,cases)[1][0]
+    """
+    Fonction qui effectue le premier déplacement
+    Elle renvoie les coordonnées après ce déplacement
+    """
+    dep=y1*len(matrice[0])+x1 #donne le rang de la case de départ dans la liste cases
+    case=chemin_ouvert(cases,len(matrice[0]),len(matrice),dep,x1,y1)
     direct=dep-case
-    if direct==1:
+    if direct==1: #vers la gauche
         x1-=1
-    elif direct==-1:
+        direct="gauche"
+    elif direct==-1: #vers la droite
         x1+=1
-    elif direct==len(matrice[0]):
+        direct="droite"
+    elif direct==len(matrice[0]): #vers le haut
         y1-=1
-    elif direct==-len(matrice[0]):
-        y1+=1  
-    return [x1,y1]
+        direct="haut"
+    elif direct==-len(matrice[0]): #vers le bas
+        y1+=1
+        direct="bas"
+    return [x1,y1,direct]
 
 
 
 def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
-    
-    x=x1
-    y=y1
-    coords=initialisation()
+    coords=initialisation(matrice,cases,x1,y1)
     x1=coords[0]
     y1=coords[1]
-    matrice[y1][x1]=-2
-    
+    orient=coords[2]
+    a=0
     while [x1,y1]!=[x2,y2]:
-        print("yola")
-        orient=determine_orientation(x1,y1,x,y)
+        matrice[y1][x1]=-2
+        a+=1
+        if a==200:
+            break
         direct=direction(orient)
-        x,y=x1,y1
         coords=deplacement(direct,x1,y1)
-        print(coords)
-        print(type(coords))
         x1=coords[0]
         y1=coords[1]
-        matrice[y1][x1]=-2
+        orient=coords[2]
     affiche_laby(matrice)
 
 
