@@ -21,15 +21,18 @@ def genere_matrice(h,l):
     return matrice
 
 def affiche_laby(matrice):
-    p=[" ","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
     for i in range(len(matrice)):
         for j in range(len(matrice[0])):
             if matrice[i][j]==-1:
                 print("* ",end="")
             elif matrice[i][j]==-2:
                 print(". ",end="")
+            elif matrice[i][j]==-3:
+                print("A ",end="")
+            elif matrice[i][j]==-4:
+                print("B ",end="")
             else:
-                print(p[matrice[i][j]]+" ",end="")
+                print("  ",end="")
         print("")
 
 def cases_adjacentes(h,l,case,cases):
@@ -77,7 +80,6 @@ def genere_laby(h,l,matrice):
                 matrice[1+2*(i//l)][1+2*(i%l)]=min(x,y)
         matrice[1+m//l+r//l][m%l+r%l+1]=0
     return matrice
-
 
 def check_depart(matrice,cases,x1,y1):
     """
@@ -127,20 +129,20 @@ def entree_infos_chemin(matrice,cases):
         x1=int(input("X: ")) #abscisse du départ
         y1=int(input("Y: ")) #ordonnée du départ
         depok=check_depart(matrice,cases,x1,y1) #vérifie que le départ est bien placé
-        if depok==False or cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0]==0:
+        if depok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0])==0:
             print("Coordonnées invalides")
-        
+            depok=False
             
     while arrok==False:
         print("Entrer les coordonnées du point d'arrivée:")
         x2=int(input("X: ")) #abscisse de l'arrivée
         y2=int(input("Y: ")) #ordonnée de l'arrivée
         arrok=check_arrivee(matrice,cases,x2,y2) #vérifie que l'arrivée est bien placée
-        if arrok==False or cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0]==0:
+        if arrok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])==0:
             print("Coordonnées invalides")
+            arrok=False
             
     return x1,y1,x2,y2
-
 
 def parcours(x,y,h,l,laby,c):
     a=cases_adjacentes(h,l,l*y+x,laby)[1]
@@ -150,10 +152,22 @@ def parcours(x,y,h,l,laby,c):
     for i in a:
         laby=parcours(i%l,i//l,h,l,laby,c+1)
     return laby
+    
+def parcoursinv(x,y,xa,ya,h,l,laby):
+    while (x,y)!=(xa,ya):
+        for i in [(y-1)*l+x,y*l+x-1,y*l+x+1,(y+1)*l+x]:
+            if laby[i]==laby[y*l+x]-1:
+                laby[y*l+x]=-2
+                x,y=i%l,i//l
+                break  
+    return laby
+        
+        
         
 h,l=entree_infos_laby()
 matrice=genere_matrice(h,l)
 matrice=genere_laby(h,l,matrice)
+print("Voici le labyrinthe aléatoire généré :")
 affiche_laby(matrice)
 cases=[]
 for i in range(len(matrice)): #génère la liste des cases
@@ -162,7 +176,11 @@ x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
 cases[(1+2*l)*y1+x1]=0
 cases[(1+2*l)*y2+x2]=0
 laby=parcours(x1,y1,len(matrice),len(matrice[0]),cases,1)
+laby=parcoursinv(x2,y2,x1,y1,len(matrice),len(matrice[0]),cases)
+cases[(1+2*l)*y1+x1]=-3
+cases[(1+2*l)*y2+x2]=-4
 matrice=[]
 for i in range(2*h+1):
     matrice.append(laby[(2*l+1)*i:(2*l+1)*(i+1)])
+print("Voici le plus court chemin :")
 affiche_laby(matrice)
