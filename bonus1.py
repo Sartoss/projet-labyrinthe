@@ -159,6 +159,7 @@ def parcours(x,y,xa,ya,h,l,laby):
             if(x,y)==(xa,ya):
                 arrivé=True
         c+=1
+    return laby
     
 def parcoursinv(x,y,xa,ya,h,l,laby):
     while (x,y)!=(xa,ya):
