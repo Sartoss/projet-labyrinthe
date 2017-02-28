@@ -177,7 +177,7 @@ def direction(orient):
     return direction
     
     
-def deplacement(direct,x1,y1):
+def deplacement(matrice,direct,x1,y1):
     """
     Fonction qui effectue le déplacement
     Elle renvoie les nouvelles coordonnées, la direction prise et le rang de priorité
@@ -256,7 +256,7 @@ def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
         x,y=x1,y1 #enregistre les coordonnées de la case précédente
         a+=1
         direct=direction(orient) #donne l'ordre de priorité des murs à suivre
-        coords=deplacement(direct,x1,y1) #effectue le déplacement
+        coords=deplacement(matrice,direct,x1,y1) #effectue le déplacement
         x1=coords[0]
         y1=coords[1]
         orient=coords[2]
@@ -265,17 +265,22 @@ def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
     return matrice
 
 
-        
-h,l=entree_infos_laby()
-matrice=genere_matrice(h,l)
-matrice=genere_laby(h,l,matrice)
-affiche_laby(matrice)
-cases=[]
-for i in range(len(matrice)): #génère la liste des cases
-    cases+=matrice[i]
-x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
-matrice[y1][x1]=10
-matrice[y2][x2]=11
-affiche_laby(matrice)
-matrice=deplacement_main_droite(matrice,x1,y1,x2,y2,cases)
-affiche_laby(matrice)
+
+def main():
+    """
+    Fonction principale du programme
+    """
+    h,l=entree_infos_laby()
+    matrice=genere_matrice(h,l)
+    matrice=genere_laby(h,l,matrice)
+    affiche_laby(matrice)
+    cases=[]
+    for i in range(len(matrice)): #génère la liste des cases
+        cases+=matrice[i]
+    x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
+    matrice[y1][x1]=10
+    matrice[y2][x2]=11
+    affiche_laby(matrice)
+    matrice=deplacement_main_droite(matrice,x1,y1,x2,y2,cases)
+    affiche_laby(matrice)
+main()
