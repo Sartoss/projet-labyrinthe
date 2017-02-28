@@ -136,7 +136,7 @@ def entree_infos_chemin(matrice,cases):
         x2=int(input("X: ")) #abscisse de l'arrivée
         y2=int(input("Y: ")) #ordonnée de l'arrivée
         arrok=check_arrivee(matrice,cases,x2,y2) #vérifie que l'arrivée est bien placée
-        if arrok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])==0:
+        if arrok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])==0 or (x1==x2 and y1==y2):
             print("Coordonnées invalides")
             arrok=False
             
