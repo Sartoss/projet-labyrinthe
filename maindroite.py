@@ -262,7 +262,7 @@ def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
         orient=coords[2]
         rang=coords[3]
     matrice[y][x]=-2
-    return matrice
+    return [matrice,a+1]
 
 
 
@@ -280,7 +280,9 @@ def main():
     x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
     matrice[y1][x1]=10
     matrice[y2][x2]=11
+    mat=deplacement_main_droite(matrice,x1,y1,x2,y2,cases)
+    matrice=mat[0]
+    deplacements=mat[1]
     affiche_laby(matrice)
-    matrice=deplacement_main_droite(matrice,x1,y1,x2,y2,cases)
-    affiche_laby(matrice)
+    print("Il a fallu parcourir ",deplacements," cases pour trouver le chemin")
 main()
