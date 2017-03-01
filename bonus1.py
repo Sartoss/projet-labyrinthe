@@ -161,7 +161,7 @@ def parcours(x,y,xa,ya,h,l,laby):
             if(x,y)==(xa,ya):
                 arrivé=True
         c+=1
-    return (laby,nb)
+    return laby,nb
     
 def parcoursinv(x,y,xa,ya,h,l,laby):
     while (x,y)!=(xa,ya):
@@ -187,7 +187,7 @@ for i in range(len(matrice)): #génère la liste des cases
 x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
 cases[(l)*y1+x1]=0
 cases[(l)*y2+x2]=0
-(laby,nb)=parcours(x1,y1,x2,y2,h,l,cases)
+laby,nb=parcours(x1,y1,x2,y2,h,l,cases)
 laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
 cases[(l)*y1+x1]=-3
 cases[(l)*y2+x2]=-4
