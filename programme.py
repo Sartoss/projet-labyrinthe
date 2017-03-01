@@ -10,6 +10,9 @@ def entree_infos_laby():
     return (h,l)
 
 def genere_matrice(h,l):
+    """
+    Créé une matrice au bon format qui servira de base pour la création du labyrinthe
+    """
     matrice=[[-1]*(2*l+1)]
     for i in range(h):
         liste=[-1]
@@ -21,6 +24,9 @@ def genere_matrice(h,l):
     return matrice
 
 def affiche_laby(matrice):
+    """
+    Affiche le labyrinthe de maniere compréhensible pour l'utilisateur
+    """
     for i in range(len(matrice)):
         for j in range(len(matrice[0])):
             if matrice[i][j]==-1:
@@ -37,7 +43,8 @@ def affiche_laby(matrice):
 
 def cases_adjacentes(h,l,case,cases):
     """
-    Renvoie les connexions possibles d'une case donnée
+    Renvoie deux liste, la première contient la position des cases adjacentes dont le contenu est différent de celui
+    de la case donnée, la deuxième contient la position des cases adjacentes dont le contenu est identique à la caes donnée
     """
     i=[]
     d=[]
@@ -58,7 +65,7 @@ def cases_adjacentes(h,l,case,cases):
 
 def genere_laby(h,l,matrice):
     """
-    Génere un labyrinthe aléatoire à partir d'une matrice
+    Génere un labyrinthe aléatoire en se basant sur la matrice créé précédemment
     """
     cases=[i for i in range(h*l)]
     connect=[i for i in range(h*l)]
@@ -145,6 +152,9 @@ def entree_infos_chemin(matrice,cases):
     return x1,y1,x2,y2
 
 def parcours(x,y,h,l,laby,c):
+    """
+    fonction recursive qui inscrit dans chaque case libre non parcouru, la distance depuis l
+    """
     a=cases_adjacentes(h,l,l*y+x,laby)[1]
     laby[y*l+x]=c
     if len(a)==0:
