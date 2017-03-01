@@ -138,7 +138,7 @@ def entree_infos_chemin(matrice,cases):
         x2=int(input("X: ")) #abscisse de l'arrivée
         y2=int(input("Y: ")) #ordonnée de l'arrivée
         arrok=check_arrivee(matrice,cases,x2,y2) #vérifie que l'arrivée est bien placée
-        if arrok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])==0:
+        if arrok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])==0 or (x1==x2 and y1==y2):
             print("Coordonnées invalides")
             arrok=False
             
@@ -162,26 +162,30 @@ def parcoursinv(x,y,xa,ya,h,l,laby):
                 break  
     return laby
         
-
-h,l=entree_infos_laby()
-matrice=genere_matrice(h,l)
-matrice=genere_laby(h,l,matrice)
-print("Voici le labyrinthe aléatoire généré :")
-affiche_laby(matrice)
-l=2*l+1
-h=2*h+1
-cases=[]
-for i in range(len(matrice)): #génère la liste des cases
-    cases+=matrice[i]
-x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
-cases[(l)*y1+x1]=0
-cases[(l)*y2+x2]=0
-laby=parcours(x1,y1,len(matrice),len(matrice[0]),cases,1)
-laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
-cases[(l)*y1+x1]=-3
-cases[(l)*y2+x2]=-4
-matrice=[]
-for i in range(h):
-    matrice.append(laby[(l)*i:(l)*(i+1)])
-print("Voici le plus court chemin :")
-affiche_laby(matrice)
+def main():
+    """
+    Fonction principale du programme
+    """
+    h,l=entree_infos_laby()
+    matrice=genere_matrice(h,l)
+    matrice=genere_laby(h,l,matrice)
+    print("Voici le labyrinthe aléatoire généré :")
+    affiche_laby(matrice)
+    l=2*l+1
+    h=2*h+1
+    cases=[]
+    for i in range(len(matrice)): #génère la liste des cases
+        cases+=matrice[i]
+    x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
+    cases[(l)*y1+x1]=0
+    cases[(l)*y2+x2]=0
+    laby=parcours(x1,y1,len(matrice),len(matrice[0]),cases,1)
+    laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
+    cases[(l)*y1+x1]=-3
+    cases[(l)*y2+x2]=-4
+    matrice=[]
+    for i in range(h):
+        matrice.append(laby[(l)*i:(l)*(i+1)])
+    print("Voici le plus court chemin :")
+    affiche_laby(matrice)
+main()
