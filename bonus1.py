@@ -145,6 +145,7 @@ def entree_infos_chemin(matrice,cases):
     return x1,y1,x2,y2
 
 def parcours(x,y,xa,ya,h,l,laby):
+    nb=0
     arrivé=False
     c=1
     a=[[],[y*l+x]]
@@ -152,6 +153,7 @@ def parcours(x,y,xa,ya,h,l,laby):
         a[0]=a[1][:]
         a[1]=[]
         for i in a[0]:
+            nb+=1
             x=i%l
             y=i//l
             a[1]+=cases_adjacentes(h,l,y*l+x,laby)[1]
@@ -159,7 +161,7 @@ def parcours(x,y,xa,ya,h,l,laby):
             if(x,y)==(xa,ya):
                 arrivé=True
         c+=1
-    return laby
+    return (laby,nb)
     
 def parcoursinv(x,y,xa,ya,h,l,laby):
     while (x,y)!=(xa,ya):
@@ -185,12 +187,12 @@ for i in range(len(matrice)): #génère la liste des cases
 x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
 cases[(l)*y1+x1]=0
 cases[(l)*y2+x2]=0
-laby=parcours(x1,y1,x2,y2,h,l,cases)
+(laby,nb)=parcours(x1,y1,x2,y2,h,l,cases)
 laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
 cases[(l)*y1+x1]=-3
 cases[(l)*y2+x2]=-4
 matrice=[]
 for i in range(h):
     matrice.append(laby[(l)*i:(l)*(i+1)])
-print("Voici le plus court chemin :")
+print("Le programme a parcouru "+str(nb)+" cases\nVoici le plus court chemin :")
 affiche_laby(matrice)
