@@ -165,24 +165,6 @@ def entree_infos_chemin(matrice,cases):
             arrok=False
             
     return x1,y1,x2,y2
-
-
-def determine_orientation(x1,y1,x,y):
-    """
-    Fonction qui détermine l'orientation suivie
-    Elle renvoie cette orientation
-    """
-    if x1-x==0:
-        if y1-y==1:
-            orient="bas"
-        else:
-            orient="haut"
-    elif x1-x==1:
-        orient="droite"
-    else:
-        orient="gauche"
-    return orient
-    
     
 def direction(orient):
     """
