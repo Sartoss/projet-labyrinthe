@@ -5,8 +5,16 @@ def entree_infos_laby():
     Fonction qui fait entrer par l'utilisateur les dimensions du labyrinthe
     Elle renvoie la hauteur et la largeur du labyrinthe
     """
-    l=int(input("Entrez les dimensions du labyrinthe :\nLargeur :"))
-    h=int(input("Hauteur :"))
+    l=input("Entrez les dimensions du labyrinthe :\nLargeur :")
+    h=input("Hauteur :")
+    try:
+        l=int(l)
+        l=abs(l)
+        h=int(h)
+        h=abs(h)
+    except:
+        print("Merci d'entrer des dimensions qui sont des entiers.")
+        entree_infos_laby()
     return (h,l)
 
 def genere_matrice(h,l):
