@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Mar  3 14:02:12 2017
+
+@author: piroulasau
+"""
+
 from random import*
 
 def entree_infos_laby():
@@ -5,8 +12,16 @@ def entree_infos_laby():
     Fonction qui fait entrer par l'utilisateur les dimensions du labyrinthe
     Elle renvoie la hauteur et la largeur du labyrinthe
     """
-    l=int(input("Entrez les dimensions du labyrinthe :\nLargeur :"))
-    h=int(input("Hauteur :"))
+    l=input("Entrez les dimensions du labyrinthe :\nLargeur :")
+    h=input("Hauteur :")
+    try:
+        l=int(l)
+        l=abs(l)
+        h=int(h)
+        h=abs(h)
+    except:
+        print("Merci d'entrer des dimensions qui sont des entiers.")
+        entree_infos_laby()
     return (h,l)
 
 def genere_matrice(h,l):
@@ -173,26 +188,30 @@ def parcoursinv(x,y,xa,ya,h,l,laby):
     return laby
         
         
-        
-h,l=entree_infos_laby()
-matrice=genere_matrice(h,l)
-matrice=genere_laby(h,l,matrice)
-print("Voici le labyrinthe aléatoire généré :")
-affiche_laby(matrice)
-l=2*l+1
-h=2*h+1
-cases=[]
-for i in range(len(matrice)): #génère la liste des cases
-    cases+=matrice[i]
-x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
-cases[(l)*y1+x1]=0
-cases[(l)*y2+x2]=0
-laby,nb=parcours(x1,y1,x2,y2,h,l,cases)
-laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
-cases[(l)*y1+x1]=-3
-cases[(l)*y2+x2]=-4
-matrice=[]
-for i in range(h):
-    matrice.append(laby[(l)*i:(l)*(i+1)])
-print("Le programme a parcouru "+str(nb)+" cases\nVoici le plus court chemin :")
-affiche_laby(matrice)
+def main():
+    """
+    Fonction principale du programme
+    """        
+    h,l=entree_infos_laby()
+    matrice=genere_matrice(h,l)
+    matrice=genere_laby(h,l,matrice)
+    print("Voici le labyrinthe aléatoire généré :")
+    affiche_laby(matrice)
+    l=2*l+1
+    h=2*h+1
+    cases=[]
+    for i in range(len(matrice)): #génère la liste des cases
+        cases+=matrice[i]
+    x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
+    cases[(l)*y1+x1]=0
+    cases[(l)*y2+x2]=0
+    laby,nb=parcours(x1,y1,x2,y2,h,l,cases)
+    laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
+    cases[(l)*y1+x1]=-3
+    cases[(l)*y2+x2]=-4
+    matrice=[]
+    for i in range(h):
+        matrice.append(laby[(l)*i:(l)*(i+1)])
+    print("Le programme a parcouru "+str(nb)+" cases\nVoici le plus court chemin :")
+    affiche_laby(matrice)
+main()
