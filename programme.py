@@ -166,7 +166,7 @@ def parcours(x,y,h,l,laby,c):
     
 def parcoursinv(x,y,xa,ya,h,l,laby):
     """
-    Trace le chemin le plus cours en partant de l'arrivée
+    Trace le chemin le plus court en partant de l'arrivée
     """
     while (x,y)!=(xa,ya):
         for i in [(y-1)*l+x,y*l+x-1,y*l+x+1,(y+1)*l+x]:
