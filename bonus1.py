@@ -25,6 +25,9 @@ def entree_infos_laby():
     return (h,l)
 
 def genere_matrice(h,l):
+    """
+    Créé une matrice au bon format qui servira de base pour la création du labyrinthe
+    """
     matrice=[[-1]*(2*l+1)]
     for i in range(h):
         liste=[-1]
@@ -36,6 +39,9 @@ def genere_matrice(h,l):
     return matrice
 
 def affiche_laby(matrice):
+    """
+    Affiche le labyrinthe de maniere compréhensible pour l'utilisateur
+    """
     for i in range(len(matrice)):
         for j in range(len(matrice[0])):
             if matrice[i][j]==-1:
@@ -172,7 +178,7 @@ def parcours(x,y,xa,ya,h,l,laby):
             x=i%l
             y=i//l
             a[1]+=cases_adjacentes(h,l,y*l+x,laby)[1]
-            cases[y*l+x]=c
+            laby[y*l+x]=c
             if(x,y)==(xa,ya):
                 arrivé=True
         c+=1
