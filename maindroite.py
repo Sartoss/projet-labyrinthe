@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Mar  3 13:42:54 2017
+
+@author: piroulasau
+"""
+
 from random import*
 
 def entree_infos_laby():
@@ -18,6 +25,9 @@ def entree_infos_laby():
     return (h,l)
 
 def genere_matrice(h,l):
+    """
+    Créé une matrice au bon format qui servira de base pour la création du labyrinthe
+    """
     matrice=[[-1]*(2*l+1)]
     for i in range(h):
         liste=[-1]
@@ -29,15 +39,21 @@ def genere_matrice(h,l):
     return matrice
 
 def affiche_laby(matrice):
-    p=[" ","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
+    """
+    Affiche le labyrinthe de maniere compréhensible pour l'utilisateur
+    """
     for i in range(len(matrice)):
         for j in range(len(matrice[0])):
             if matrice[i][j]==-1:
                 print("* ",end="")
             elif matrice[i][j]==-2:
                 print(". ",end="")
+            elif matrice[i][j]==-3:
+                print("A ",end="")
+            elif matrice[i][j]==-4:
+                print("B ",end="")
             else:
-                print(p[matrice[i][j]]+" ",end="")
+                print("  ",end="")
         print("")
 
 def cases_adjacentes(h,l,case,cases):
@@ -286,8 +302,8 @@ def main():
     for i in range(len(matrice)): #génère la liste des cases
         cases+=matrice[i]
     x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
-    matrice[y1][x1]=10
-    matrice[y2][x2]=11
+    matrice[y1][x1]=-3
+    matrice[y2][x2]=-4
     mat=deplacement_main_droite(matrice,x1,y1,x2,y2,cases)
     matrice=mat[0]
     deplacements=mat[1]
