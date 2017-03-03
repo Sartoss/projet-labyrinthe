@@ -5,8 +5,16 @@ def entree_infos_laby():
     Fonction qui fait entrer par l'utilisateur les dimensions du labyrinthe
     Elle renvoie la hauteur et la largeur du labyrinthe
     """
-    l=int(input("Entrez les dimensions du labyrinthe :\nLargeur :"))
-    h=int(input("Hauteur :"))
+    l=input("Entrez les dimensions du labyrinthe :\nLargeur :")
+    h=input("Hauteur :")
+    try:
+        l=int(l)
+        l=abs(l)
+        h=int(h)
+        h=abs(h)
+    except:
+        print("Merci d'entrer des dimensions qui sont des entiers.")
+        entree_infos_laby()
     return (h,l)
 
 def genere_matrice(h,l):
@@ -44,8 +52,7 @@ def affiche_laby(matrice):
 def cases_adjacentes(h,l,case,cases):
     """
     Renvoie deux liste, la première contient la position des cases adjacentes dont le contenu est différent de celui
-    de la case donnée, la deuxième contient la position des cases adjacentes dont le contenu est identique à celui de 
-    la caes donnée.
+    de la case donnée, la deuxième contient la position des cases adjacentes dont le contenu est identique à la caes donnée
     """
     i=[]
     d=[]
@@ -154,7 +161,7 @@ def entree_infos_chemin(matrice,cases):
 
 def parcours(x,y,h,l,laby,c):
     """
-    fonction recursive qui inscrit dans chaque case libre non parcouru, la distance depuis l'entrée
+    fonction recursive qui inscrit dans chaque case libre non parcouru, la distance depuis l
     """
     a=cases_adjacentes(h,l,l*y+x,laby)[1]
     laby[y*l+x]=c
@@ -165,9 +172,6 @@ def parcours(x,y,h,l,laby,c):
     return laby
     
 def parcoursinv(x,y,xa,ya,h,l,laby):
-    """
-    Trace le chemin le plus court en partant de l'arrivée
-    """
     while (x,y)!=(xa,ya):
         for i in [(y-1)*l+x,y*l+x-1,y*l+x+1,(y+1)*l+x]:
             if laby[i]==laby[y*l+x]-1:
@@ -176,26 +180,30 @@ def parcoursinv(x,y,xa,ya,h,l,laby):
                 break  
     return laby
         
-
-h,l=entree_infos_laby()
-matrice=genere_matrice(h,l)
-matrice=genere_laby(h,l,matrice)
-print("Voici le labyrinthe aléatoire généré :")
-affiche_laby(matrice)
-l=2*l+1
-h=2*h+1
-cases=[]
-for i in range(len(matrice)): #génère la liste des cases
-    cases+=matrice[i]
-x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
-cases[(l)*y1+x1]=0
-cases[(l)*y2+x2]=0
-laby=parcours(x1,y1,h,l,cases,1)
-laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
-cases[(l)*y1+x1]=-3
-cases[(l)*y2+x2]=-4
-matrice=[]
-for i in range(h):
-    matrice.append(laby[(l)*i:(l)*(i+1)])
-print("Voici le plus court chemin :")
-affiche_laby(matrice)
+def main():
+    """
+    Fonction principale du programme
+    """
+    h,l=entree_infos_laby()
+    matrice=genere_matrice(h,l)
+    matrice=genere_laby(h,l,matrice)
+    print("Voici le labyrinthe aléatoire généré :")
+    affiche_laby(matrice)
+    l=2*l+1
+    h=2*h+1
+    cases=[]
+    for i in range(len(matrice)): #génère la liste des cases
+        cases+=matrice[i]
+    x1,y1,x2,y2=entree_infos_chemin(matrice,cases)
+    cases[(l)*y1+x1]=0
+    cases[(l)*y2+x2]=0
+    laby=parcours(x1,y1,len(matrice),len(matrice[0]),cases,1)
+    laby=parcoursinv(x2,y2,x1,y1,h,l,cases)
+    cases[(l)*y1+x1]=-3
+    cases[(l)*y2+x2]=-4
+    matrice=[]
+    for i in range(h):
+        matrice.append(laby[(l)*i:(l)*(i+1)])
+    print("Voici le plus court chemin :")
+    affiche_laby(matrice)
+main()
