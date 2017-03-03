@@ -189,8 +189,12 @@ def parcoursinv(x,y,xa,ya,h,l,laby):
     return laby
 
 def genere_cycles(h,l,laby):
+    """
+    Fonction qui, à partir des dimensions et de la matrice du labyrinthe, y ajoute des cycles
+    Elle renvoie  le labyrinthe ainsi complexifié
+    """
     liste=[]
-    for j in range(1,h-1):
+    for j in range(1,h-1): 
         for i in range(1,l-1):
             if laby[j][i]!=0 and(laby[j-1][i]==laby[j+1][i])and(laby[j][i-1]==laby[j][i+1])and(laby[j+1][i]!=laby[j][i-1]):
                 liste.append([i,j])
