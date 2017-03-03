@@ -201,3 +201,216 @@ print(check_arrivee([[-1, -1, -1, -1, -1, -1, -1],
                      
 ############################################################################################################
                      
+def entree_infos_chemin(matrice,cases):
+    """
+    Fonction qui fait entrer par l'utilisateur les coordonnées de départ et d'arrivée du labyrinthe
+    Elle renvoie les coordonnées du départ et de l'arrivée
+    """
+    depok=False
+    arrok=False  
+    while depok==False:
+        print("Entrer les coordonnées du point de départ:")
+        x1=int(input("X: ")) #abscisse du départ
+        y1=int(input("Y: ")) #ordonnée du départ
+        depok=check_depart(matrice,cases,x1,y1) #vérifie que le départ est bien placé
+        if depok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y1*len(matrice[0])+x1,cases)[0])==0:
+            print("Coordonnées invalides")
+            depok=False
+            
+    while arrok==False:
+        print("Entrer les coordonnées du point d'arrivée:")
+        x2=int(input("X: ")) #abscisse de l'arrivée
+        y2=int(input("Y: ")) #ordonnée de l'arrivée
+        arrok=check_arrivee(matrice,cases,x2,y2) #vérifie que l'arrivée est bien placée
+        if arrok==False or len(cases_adjacentes(len(matrice),len(matrice[0]),y2*len(matrice[0])+x2,cases)[0])==0:
+            print("Coordonnées invalides")
+            arrok=False
+            
+    return x1,y1,x2,y2
+    
+print(entree_infos_chemin([[-1, -1, -1, -1, -1, -1, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, 0, 0, 0, 0, -1], 
+                           [-1, -1, -1, -1, -1, -1, -1]],
+                           [-1, -1, -1, -1, -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, 
+                            -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1]))
+
+############################################################################################################
+
+def genere_cycles(h,l,laby):
+    """
+    Fonction qui, à partir des dimensions et de la matrice du labyrinthe, y ajoute des cycles
+    Elle renvoie  le labyrinthe ainsi complexifié
+    """
+    liste=[]
+    for j in range(1,h-1): 
+        for i in range(1,l-1):
+            if laby[j][i]!=0 and(laby[j-1][i]==laby[j+1][i])and(laby[j][i-1]==laby[j][i+1])and(laby[j+1][i]!=laby[j][i-1]):
+                liste.append([i,j])
+    for k in range(h*l//50):
+        c=liste.pop(randint(0,len(liste)-1))
+        laby[c[1]][c[0]]=0
+    return laby
+    
+print(genere_cycles(3,3,   [[-1, -1, -1, -1, -1, -1, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, -1, 0, -1, 0, -1], 
+                           [-1, 0, 0, 0, 0, 0, -1], 
+                           [-1, -1, -1, -1, -1, -1, -1]]))
+
+############################################################################################################
+
+def direction(orient):
+    """
+    Fonction qui, selon la direction précédente, définit l'ordre de priorité des murs
+    à suivre
+    Elle renvoie une liste ordonnée de ces murs, du plus au moins prioritairement suivi
+    """
+    if orient=="haut":
+        direction=["droite","haut","gauche","bas"]
+    elif orient=="gauche":
+        direction=["haut","gauche","bas","droite"]
+    elif orient=="bas":
+        direction=["gauche","bas","droite","haut"]
+    elif orient=="droite":
+        direction=["bas","droite","haut","gauche"]
+    return direction
+    
+print(direction("haut"))
+print(direction("gauche"))
+print(direction("bas"))
+print(direction("droite"))
+
+############################################################################################################
+
+def deplacement(matrice,direct,x1,y1):
+    """
+    Fonction qui effectue le déplacement
+    Elle renvoie les nouvelles coordonnées, la direction prise et le rang de priorité
+    du mur suivi
+    """
+    for i in range(4):
+        if direct[i]=="droite" and matrice[y1][x1+1]!=-1:
+            return [x1+1,y1,"droite",i]
+        elif direct[i]=="gauche" and matrice[y1][x1-1]!=-1:
+            return [x1-1,y1,"gauche",i]
+        elif direct[i]=="haut" and matrice[y1-1][x1]!=-1:
+            return [x1,y1-1,"haut",i]
+        elif direct[i]=="bas" and matrice[y1+1][x1]!=-1:
+            return [x1,y1+1,"bas",i]
+
+print(deplacement([[-1, -1, -1, -1, -1, -1, -1], 
+                   [-1, 0, -1, 0, -1, 0, -1], 
+                   [-1, 0, -1, 0, -1, 0, -1], 
+                   [-1, 0, -1, 0, -1, 0, -1], 
+                   [-1, 0, -1, 0, -1, 0, -1], 
+                   [-1, 0, 0, 0, 0, 0, -1], 
+                   [-1, -1, -1, -1, -1, -1, -1]],["droite","haut","gauche","bas"],1,1))
+
+############################################################################################################
+
+def chemin_ouvert(cases,l,h,dep,x1,y1):
+    """
+    Fonction qui trouve le numéro de la case adjacente au départ
+    Elle renvoie ce numéro
+    """
+    if x1==0:
+        return dep+1
+    elif x1==l-1:
+        return dep-1
+    elif y1==0:
+        return dep+l
+    elif y1==h-1:
+        return dep-l
+        
+print(chemin_ouvert([-1, -1, -1, -1, -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, 
+                     -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1],
+                     3,3,7,0,1))
+
+############################################################################################################
+
+def initialisation(matrice,cases,x1,y1):
+    """
+    Fonction qui effectue le premier déplacement
+    Elle renvoie les coordonnées après ce déplacement
+    """
+    dep=y1*len(matrice[0])+x1 #donne le rang de la case de départ dans la liste cases
+    case=chemin_ouvert(cases,len(matrice[0]),len(matrice),dep,x1,y1)
+    direct=dep-case
+    if direct==1: #vers la gauche
+        x1-=1
+        direct="gauche"
+    elif direct==-1: #vers la droite
+        x1+=1
+        direct="droite"
+    elif direct==len(matrice[0]): #vers le haut
+        y1-=1
+        direct="haut"
+    elif direct==-len(matrice[0]): #vers le bas
+        y1+=1
+        direct="bas"
+    return [x1,y1,direct]
+
+print(initialisation([[-1, -1, -1, -1, -1, -1, -1], 
+                      [-1, 0, -1, 0, -1, 0, -1], 
+                      [-1, 0, -1, 0, -1, 0, -1], 
+                      [-1, 0, -1, 0, -1, 0, -1], 
+                      [-1, 0, -1, 0, -1, 0, -1], 
+                      [-1, 0, 0, 0, 0, 0, -1], 
+                      [-1, -1, -1, -1, -1, -1, -1]],
+                      [-1, -1, -1, -1, -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, 
+                     -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1],
+                     0,1))
+
+############################################################################################################
+
+def deplacement_main_droite(matrice,x1,y1,x2,y2,cases):
+    """
+    Fonction qui simule le déplacement dans le labyrinthe par la méthode de la main droite
+    Elle retourne la matrice du labyrinthe modifiée avec le chemin de l'entrée à la sortie
+    """
+    coords=initialisation(matrice,cases,x1,y1) #récupère les coordonnées après le 1er déplacement
+    x1=coords[0]
+    y1=coords[1]
+    orient=coords[2] #direction prise
+    a=rang=0
+    cases_visitees=[]
+    while [x1,y1]!=[x2,y2]: #tant qu'on n'a pas atteint l'arrivée
+        if rang==3: #demi-tour: on efface la point dans le cul-de-sac
+            matrice[y][x]=0
+        if matrice[y1][x1]==-2 or [x1,y1] in cases_visitees: #retour en arrière: on efface le chemin incorrect
+            matrice[y1][x1]=0
+        else: #nouveau chemin
+            matrice[y1][x1]=-2
+            cases_visitees.append([x1,y1])
+            if a>0: #gère les virages où on passe plusieurs fois
+                matrice[y][x]=-2
+        x,y=x1,y1 #enregistre les coordonnées de la case précédente
+        a+=1
+        direct=direction(orient) #donne l'ordre de priorité des murs à suivre
+        coords=deplacement(matrice,direct,x1,y1) #effectue le déplacement
+        x1=coords[0]
+        y1=coords[1]
+        orient=coords[2]
+        rang=coords[3]
+    matrice[y][x]=-2
+    return [matrice,a+1]
+
+print(deplacement_main_droite([[-1, -1, -1, -1, -1, -1, -1], 
+                               [-1, 0, -1, 0, -1, 0, -1], 
+                               [-1, 0, -1, 0, -1, 0, -1], 
+                               [-1, 0, -1, 0, -1, 0, -1], 
+                               [-1, 0, -1, 0, -1, 0, -1], 
+                               [-1, 0, 0, 0, 0, 0, -1], 
+                               [-1, -1, -1, -1, -1, -1, -1]],
+                               0,1,0,5,
+                               [-1, -1, -1, -1, -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, 
+                                -1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1]))
+
+############################################################################################################
+
