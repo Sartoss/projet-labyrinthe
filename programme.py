@@ -161,7 +161,7 @@ def entree_infos_chemin(matrice,cases):
 
 def parcours(x,y,h,l,laby,c):
     """
-    fonction recursive qui inscrit dans chaque case libre non parcouru, la distance depuis l
+    Fonction recursive qui inscrit dans chaque case libre non parcouru, la distance depuis l
     """
     a=cases_adjacentes(h,l,l*y+x,laby)[1]
     laby[y*l+x]=c
